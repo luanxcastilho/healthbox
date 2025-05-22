@@ -1,0 +1,41 @@
+services:
+  healthbox-agendamento-db:
+    image: mysql:8
+    container_name: healthbox-agendamento-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: healthbox_db
+      MYSQL_ROOT_PASSWORD: healthbox
+      MYSQL_USER: healthbox
+      MYSQL_PASSWORD: healthbox
+    networks:
+      - healthbox-network
+    volumes:
+      - healthbox-agendamento-db:/var/lib/mysql
+
+  healthbox-agendamento-app:
+    build: .
+    container_name: healthbox-agendamento-app
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://healthbox-agendamento-db:3306/healthbox_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: healthbox
+      SPRING_DATASOURCE_PASSWORD: healthbox
+      SPRING_GRAPHQL_GRAPHIQL_ENABLED: "true"
+      SPRING_GRAPHQL_GRAPHIQL_PATH: /graphiql
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: healthbox-kafka:9092
+    networks:
+      - healthbox-network
+    depends_on:
+      - healthbox-agendamento-db
+    restart: no
+
+volumes:
+  healthbox-agendamento-db:
+
+networks:
+  healthbox-network:
+    external: true

@@ -1,0 +1,38 @@
+services:
+  healthbox-notificacao-db:
+    image: mysql:8
+    container_name: healthbox-notificacao-db
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: healthbox_notificacao_db
+      MYSQL_ROOT_PASSWORD: healthboxx
+      MYSQL_USER: healthboxx
+      MYSQL_PASSWORD: healthboxx
+    networks:
+      - healthbox-network
+    volumes:
+      - healthbox-notificacao-db:/var/lib/mysql
+
+  healthbox-notificacao-app:
+    build: .
+    container_name: healthbox-notificacao-app
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://healthbox-notificacao-db:3306/healthbox_notificacao_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: healthboxx
+      SPRING_DATASOURCE_PASSWORD: healthboxx
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: healthbox-kafka:9092
+    networks:
+      - healthbox-network
+    depends_on:
+      - healthbox-notificacao-db
+
+volumes:
+  healthbox-notificacao-db:
+
+networks:
+  healthbox-network:
+    external: true
