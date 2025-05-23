@@ -55,7 +55,7 @@ Este projeto tem como objetivo gerenciar o agendamento de consultas, pacientes, 
 https://github.com/luanxcastilho/healthbox
 
 # Na raiz do projeto, execute o comando abaixo para realizar o build:
-./mvn clean package -DskipTests
+mvn clean package -DskipTests
 
 # Na raiz do projeto, execute o comando abaixo para subir os serviços:
 docker-compose up -d
