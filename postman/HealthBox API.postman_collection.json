@@ -1,0 +1,611 @@
+{
+	"info": {
+		"_postman_id": "4dcfb989-e915-4838-a06d-408c4fc4167d",
+		"name": "HealthBox API",
+		"description": "Sistema de agendamento de consultas médicas, construído com arquitetura de microserviços utilizando **Spring Boot**, **GraphQL** para API, **Kafka** para mensageria/eventos e **MySQL** como banco de dados, para o FIAP - Tech Challenge 3.\n\nGithub: [https://github.com/luanxcastilho/healthbox](https://github.com/luanxcastilho/healthbox)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13377788"
+	},
+	"item": [
+		{
+			"name": "Paciente",
+			"item": [
+				{
+					"name": "pacienteBuscarTodos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Pacientes {\r\n    pacientes(page: 0, size: 10) {\r\n        id\r\n        nome\r\n        cpf\r\n        dataNascimento\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pacienteBuscarPorId",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Paciente {\r\n    paciente(id: \"1\") {\r\n        id\r\n        nome\r\n        cpf\r\n        dataNascimento\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pacienteCreate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  p1: createPaciente(input: {nome: \"Lucas Almeida\", cpf: \"12345678901\", dataNascimento: \"1992-04-16\"}) { id nome }\r\n  p2: createPaciente(input: {nome: \"Fernanda Souza\", cpf: \"98765432100\", dataNascimento: \"1987-09-03\"}) { id nome }\r\n  p3: createPaciente(input: {nome: \"Rafael Castro\", cpf: \"11223344556\", dataNascimento: \"1975-12-22\"}) { id nome }\r\n}\r\n\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pacienteUpdate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdatePaciente {\r\n    updatePaciente(\r\n        id: \"1\"\r\n        input: {\r\n            nome: \"Lucas Rafael Almeida\"\r\n            cpf: \"12345678902\"\r\n            dataNascimento: \"1992-04-15\"\r\n        }\r\n    ) {\r\n        id\r\n        nome\r\n        cpf\r\n        dataNascimento\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pacienteDelete",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeletePaciente {\r\n    deletePaciente(id: \"1\")\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Medico",
+			"item": [
+				{
+					"name": "medicoBuscarTodos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Medicos {\r\n    medicos(page: 0, size: 10) {\r\n        id\r\n        nome\r\n        crm\r\n        especialidade\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "medicoBuscarPorId",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Medico {\r\n    medico(id: \"1\") {\r\n        id\r\n        nome\r\n        crm\r\n        especialidade\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "medicoCreate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  m1: createMedico(input: {nome: \"Dr. André Pereira\", crm: \"123456/SP\", especialidade: \"Cardiologia\"}) { id nome }\r\n  m2: createMedico(input: {nome: \"Dra. Mariana Torres\", crm: \"654321/SP\", especialidade: \"Clínica Geral\"}) { id nome }\r\n  m3: createMedico(input: {nome: \"Dr. Ricardo Nunes\", crm: \"112233/SP\", especialidade: \"Ortopedia\"}) { id nome }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "medicoUpdate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateMedico {\r\n    updateMedico(\r\n        id: \"1\"\r\n        input: {\r\n            nome: \"Dr. André Pedro\"\r\n            crm: \"123456/RJ\"\r\n            especialidade: \"Neurocirurgia\"\r\n        }\r\n    ) {\r\n        id\r\n        nome\r\n        crm\r\n        especialidade\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "medicoDelete",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteMedico {\r\n    deleteMedico(id: \"1\")\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Enfermeiro",
+			"item": [
+				{
+					"name": "enfermeiroBuscarTodos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Enfermeiros {\r\n    enfermeiros(page: 0, size: 10) {\r\n        id\r\n        nome\r\n        coren\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "enfermeiroBuscarPorId",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Enfermeiro {\r\n    enfermeiro(id: \"1\") {\r\n        id\r\n        nome\r\n        coren\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "enfermeiroCreate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  e1: createEnfermeiro(input: {nome: \"Ana Clara Silva\", coren: \"12345/SP\"}) { id nome }\r\n  e2: createEnfermeiro(input: {nome: \"Marcos Paulo Lima\", coren: \"67890/SP\"}) { id nome }\r\n  e3: createEnfermeiro(input: {nome: \"Juliana Mendes\", coren: \"54321/SP\"}) { id nome }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "enfermeiroUpdate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateEnfermeiro {\r\n    updateEnfermeiro(id: \"1\", input: { nome: \"Ana Silva\", coren: \"12344/SP\" }) {\r\n        id\r\n        nome\r\n        coren\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "enfermeiroDelete",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteEnfermeiro {\r\n    deleteEnfermeiro(id: \"1\")\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agendamento",
+			"item": [
+				{
+					"name": "agendamentoBuscarTodos",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Agendamento {\r\n    agendamentos(page: 0, size: 10) {\r\n        dataAgendamento\r\n        horaAgendamento\r\n        paciente {\r\n            id\r\n            nome\r\n            cpf\r\n            dataNascimento\r\n        }\r\n        medico {\r\n            id\r\n            nome\r\n            crm\r\n            especialidade\r\n        }\r\n        enfermeiro {\r\n            id\r\n            nome\r\n            coren\r\n        }\r\n        id\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agendamentoBuscarPorId",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Agendamento {\r\n    agendamento(id: \"2\") {\r\n        id\r\n        dataAgendamento\r\n        horaAgendamento\r\n        paciente {\r\n            id\r\n            nome\r\n            cpf\r\n            dataNascimento\r\n        }\r\n        medico {\r\n            id\r\n            nome\r\n            crm\r\n            especialidade\r\n        }\r\n        enfermeiro {\r\n            id\r\n            nome\r\n            coren\r\n        }\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agendamentoCreate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateAgendamento {\r\n    createAgendamento(\r\n        input: {\r\n            paciente: \"2\"\r\n            medico: \"2\"\r\n            enfermeiro: \"2\"\r\n            dataAgendamento: \"2025-05-29\"\r\n            horaAgendamento: \"17:30\"\r\n        }\r\n    ) {\r\n        id\r\n        dataAgendamento\r\n        horaAgendamento\r\n        paciente {\r\n            id\r\n            nome\r\n            cpf\r\n            dataNascimento\r\n        }\r\n        medico {\r\n            id\r\n            nome\r\n            crm\r\n            especialidade\r\n        }\r\n        enfermeiro {\r\n            id\r\n            nome\r\n            coren\r\n        }\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agendamentoUpdate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateAgendamento {\r\n    updateAgendamento(\r\n        id: \"1\"\r\n        input: {\r\n            paciente: \"2\"\r\n            medico: \"2\"\r\n            enfermeiro: \"3\"\r\n            dataAgendamento: \"2025-05-30\"\r\n            horaAgendamento: \"13:30\"\r\n        }\r\n    ) {\r\n        id\r\n        dataAgendamento\r\n        horaAgendamento\r\n        paciente {\r\n            id\r\n            nome\r\n            cpf\r\n            dataNascimento\r\n        }\r\n        medico {\r\n            id\r\n            nome\r\n            crm\r\n            especialidade\r\n        }\r\n        enfermeiro {\r\n            id\r\n            nome\r\n            coren\r\n        }\r\n    }\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "agendamentoDelete",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteAgendamento {\r\n    deleteAgendamento(id: \"1\")\r\n}\r\n",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,101 @@
+services:
+  healthbox-zookeeper:
+    image: bitnami/zookeeper:3.9
+    container_name: healthbox-zookeeper
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - healthbox-network
+
+  healthbox-kafka:
+    image: bitnami/kafka:3.6
+    container_name: healthbox-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: "1"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: "healthbox-zookeeper:2181"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_LISTENERS: "PLAINTEXT://0.0.0.0:9092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://healthbox-kafka:9092"
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
+    depends_on:
+      - healthbox-zookeeper
+    networks:
+      - healthbox-network
+
+  healthbox-agendamento-db:
+    image: mysql:8
+    container_name: healthbox-agendamento-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: healthbox_db
+      MYSQL_ROOT_PASSWORD: healthbox
+      MYSQL_USER: healthbox
+      MYSQL_PASSWORD: healthbox
+    networks:
+      - healthbox-network
+    volumes:
+      - healthbox-agendamento-db:/var/lib/mysql
+
+  healthbox-agendamento-app:
+    build:
+      context: ./agendamento
+    container_name: healthbox-agendamento-app
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://healthbox-agendamento-db:3306/healthbox_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: healthbox
+      SPRING_DATASOURCE_PASSWORD: healthbox
+      SPRING_GRAPHQL_GRAPHIQL_ENABLED: "true"
+      SPRING_GRAPHQL_GRAPHIQL_PATH: /graphiql
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: healthbox-kafka:9092
+    networks:
+      - healthbox-network
+    depends_on:
+      - healthbox-agendamento-db
+    restart: always
+
+  healthbox-notificacao-db:
+    image: mysql:8
+    container_name: healthbox-notificacao-db
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: healthbox_notificacao_db
+      MYSQL_ROOT_PASSWORD: healthboxx
+      MYSQL_USER: healthboxx
+      MYSQL_PASSWORD: healthboxx
+    networks:
+      - healthbox-network
+    volumes:
+      - healthbox-notificacao-db:/var/lib/mysql
+
+  healthbox-notificacao-app:
+    build:
+      context: ./notificacao
+    container_name: healthbox-notificacao-app
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://healthbox-notificacao-db:3306/healthbox_notificacao_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: healthboxx
+      SPRING_DATASOURCE_PASSWORD: healthboxx
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: healthbox-kafka:9092
+    networks:
+      - healthbox-network
+    depends_on:
+      - healthbox-notificacao-db
+    restart: always
+
+volumes:
+  healthbox-notificacao-db:
+  healthbox-agendamento-db:
+
+networks:
+  healthbox-network:
+    driver: bridge

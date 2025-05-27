@@ -1,0 +1,113 @@
+scalar Date
+
+type Paciente {
+    id: ID!
+    nome: String!
+    cpf: String!
+    dataNascimento: Date!
+}
+
+input PacienteCreateInput {
+    nome: String!
+    cpf: String!
+    dataNascimento: Date!
+}
+
+input PacienteUpdateInput {
+    nome: String
+    cpf: String
+    dataNascimento: Date
+}
+
+type Medico {
+    id: ID!
+    nome: String!
+    crm: String!
+    especialidade: String!
+}
+
+input MedicoCreateInput {
+    nome: String!
+    crm: String!
+    especialidade: String!
+}
+
+input MedicoUpdateInput {
+    nome: String
+    crm: String
+    especialidade: String
+}
+
+type Enfermeiro {
+    id: ID!
+    nome: String!
+    coren: String!
+}
+
+input EnfermeiroCreateInput {
+    nome: String!
+    coren: String!
+}
+
+input EnfermeiroUpdateInput {
+    nome: String
+    coren: String
+}
+
+type Agendamento {
+    id: ID!
+    paciente: Paciente
+    medico: Medico
+    enfermeiro: Enfermeiro
+    dataAgendamento: Date!
+    horaAgendamento: String!
+}
+
+input AgendamentoCreateInput {
+    paciente: ID!
+    medico: ID!
+    enfermeiro: ID
+    dataAgendamento: Date!
+    horaAgendamento: String!
+}
+
+input AgendamentoUpdateInput {
+    paciente: ID
+    medico: ID
+    enfermeiro: ID
+    dataAgendamento: Date
+    horaAgendamento: String
+}
+
+extend type Query {
+    pacientes(page: Int, size: Int): [Paciente!]!
+    paciente(id: ID!): Paciente
+
+    medicos(page: Int, size: Int): [Medico!]!
+    medico(id: ID!): Medico
+
+    enfermeiros(page: Int, size: Int): [Enfermeiro!]!
+    enfermeiro(id: ID!): Enfermeiro
+
+    agendamentos(page: Int, size: Int): [Agendamento!]!
+    agendamento(id: ID!): Agendamento
+    agendamentoPorPaciente(id: ID!, page: Int, size: Int): [Agendamento]
+}
+
+extend type Mutation {
+    createPaciente(input: PacienteCreateInput!): Paciente!
+    updatePaciente(id: ID!, input: PacienteUpdateInput!): Paciente!
+    deletePaciente(id: ID!): Boolean!
+
+    createMedico(input: MedicoCreateInput!): Medico!
+    updateMedico(id: ID!, input: MedicoUpdateInput!): Medico!
+    deleteMedico(id: ID!): Boolean!
+
+    createEnfermeiro(input: EnfermeiroCreateInput!): Enfermeiro!
+    updateEnfermeiro(id: ID!, input: EnfermeiroUpdateInput!): Enfermeiro!
+    deleteEnfermeiro(id: ID!): Boolean!
+
+    createAgendamento(input: AgendamentoCreateInput!): Agendamento!
+    updateAgendamento(id: ID!, input: AgendamentoUpdateInput!): Agendamento!
+    deleteAgendamento(id: ID!): Boolean!
+}
